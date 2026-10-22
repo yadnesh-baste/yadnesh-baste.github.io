@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Which production runs will fail? – Yadnesh Baste</title>
+<meta name="description" content="Predicting failing semiconductor production runs from 590 sensors, validated the way a factory would use the model.">
+<link rel="icon" href="../assets/avatar.svg" type="image/svg+xml"><text y='.9em' font-size='90'>📈</text></svg>">
+<script src="../assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap case">
+  <header class="top" id="top"><div class="top-row"><a class="home" href="../#about"><img src="../assets/avatar.svg" alt=""><span>Yadnesh Baste</span></a><button class="theme-btn" type="button" data-theme-toggle></button></div><nav class="tabs" aria-label="Sections"><a href="../#about">About</a><a href="../#projects" aria-current="page">Projects</a><a href="../#cv">CV</a><a href="../#skills">Skills</a><a href="../#contact">Contact</a></nav></header>
+
+  <div class="case-head">
+    <h1>Which production runs will fail?</h1>
+    <p class="lede">A semiconductor line records 590 sensor signals for every production run, and about 1 in 15 runs fails inspection. I tested how far those signals can predict a failure before it happens, using the validation a factory would actually live with.</p>
+    <dl class="facts">
+      <div><dt>Data</dt><dd>UCI SECOM, 1,567 runs, 590 sensors</dd></div>
+      <div><dt>Question</dt><dd>Rank runs by failure risk</dd></div>
+      <div><dt>Tools</dt><dd>Python, scikit-learn, LightGBM</dd></div>
+      <div><dt>Code</dt><dd><a href="https://github.com/yadnesh-baste/secom-fault-detection">github.com/yadnesh-baste</a></dd></div>
+    </dl>
+  </div>
+
+  <div class="measure">
+    <h2>Why this problem</h2>
+    <p>At PowerCo I worked with sensor data from battery production, checking whether machines were ready to run. SECOM is the public dataset closest to that work: real signals, many missing values, and very few failures. In my master's programme I first met it as a classification exercise. Here I redid it properly.</p>
+
+    <h2>The trap in this dataset</h2>
+    <p>Only 104 of 1,567 runs failed. A "model" that passes every run is 93% accurate and useless. Many write-ups also shuffle the runs before splitting, so the model trains on runs from the future and is tested on the past. That leaks information a factory never has.</p>
+    <p>I measured the model by the question the quality team cares about: if we can only inspect a share of runs, how many failures do we catch when we inspect the riskiest first?</p>
+  </div>
+
+  <div class="figure" id="validation" style="max-width:640px;margin:1.5rem 0"></div>
+
+  <div class="measure">
+    <h2>What I did</h2>
+    <p><strong>Cleaning.</strong> Dropped sensors that are more than half empty or never change, filled the remaining gaps with the median, and removed near-duplicate sensors (correlation above 0.95). 590 signals became 273. Every step runs inside the model pipeline, so it only learns from training data.</p>
+    <p><strong>Time order.</strong> The CSV copy of the dataset had day and month swapped on some timestamps. I repaired them and kept runs in production order.</p>
+    <p><strong>Validation.</strong> Rolling time-based cross-validation: five folds, each trained only on earlier runs and tested on the next block. That gives 1,305 test runs with 65 failures, more reliable than one small test window.</p>
+    <p><strong>Models.</strong> Regularised logistic regression as the baseline, a random forest and LightGBM, all weighted for the rare failures.</p>
+  </div>
+
+  <h2>Results</h2>
+  <div class="grid2">
+    <div class="figure" id="curve"></div>
+    <div>
+      <div class="scroll-x"><table id="tbl"><thead><tr><th>Model</th><th class="num">ROC-AUC</th><th class="num">Caught at 10%</th><th class="num">at 20%</th><th class="num">at 30%</th></tr></thead><tbody></tbody></table></div>
+      <p class="small muted" style="margin-top:.8rem">"Caught at 10%" is the share of failing runs found when inspecting the 10% riskiest runs. Random inspection would catch 10%.</p>
+      <div class="callout"><p>LightGBM catches about twice as many failures as random inspection at the same effort. The signal is real but modest: the 90% interval for its AUC is <span id="ci"></span>, so this is a prioritisation aid, not an automatic reject rule.</p></div>
+    </div>
+  </div>
+
+  <div class="measure">
+    <h2>What I'd tell the quality team</h2>
+    <p>Use the score to order inspections, not to replace them. Start root-cause work with the sensors the model relies on most (shown in the repository). The bigger win would come from data, not algorithms: labels for <em>why</em> a run failed, and process context such as tool, chamber and recipe, which this public dataset leaves out.</p>
+    <h2>What I'd do next</h2>
+    <p>Track how the score drifts week by week, add a cost-based threshold once inspection and scrap costs are known, and test simple per-sensor control limits as a transparent alternative.</p>
+  </div>
+
+  <nav class="next" aria-label="More projects"><a href="../#projects">All projects</a><a href="churn.html">Next: who leaves a bank, and whom to call first</a></nav>
+  <footer class="small muted">Dataset: McCann and Johnston, SECOM, UCI Machine Learning Repository (2008), CC BY 4.0.</footer>
+</div>
+<script src="../assets/charts.js"></script>
+<script src="../assets/secom-data.js"></script>
+<script>
+  const R = SECOM.results, C = SECOM.curves;
+  Charts.line(document.getElementById("curve"), [
+    { name: "LightGBM", color: "blue", points: C["LightGBM"], width: 2.6 },
+    { name: "Random forest", color: "teal", points: C["Random forest"], width: 1.5 },
+    { name: "Logistic regression", color: "slate", points: C["Logistic regression"], width: 1.5 }],
+    { xLabel: "% of runs inspected, riskiest first", yLabel: "% of failing runs caught", ref: true, vline: 10, title: "Failures caught vs. inspection effort" });
+  Charts.bars(document.getElementById("validation"), [
+    { label: "Every run passes", value: SECOM.naive.always_pass_accuracy * 100 },
+    { label: "Shuffled split", value: SECOM.naive.shuffled_cv_auc * 100 },
+    { label: "Time-based split", value: R.models.LightGBM.roc_auc * 100, highlight: true }],
+    { max: 100, labelW: 130, fmt: v => v.toFixed(0), title: "Accuracy of a do-nothing model vs. AUC of LightGBM under two splits (×100)" });
+  const tb = document.querySelector("#tbl tbody"), pc = v => Math.round(v * 100) + "%";
+  Object.entries(R.models).forEach(([k, m]) => {
+    tb.insertAdjacentHTML("beforeend", `<tr class="${k === "LightGBM" ? "best" : ""}"><td>${k}</td><td class="num">${m.roc_auc.toFixed(2)}</td><td class="num">${pc(m.recall_at_10)}</td><td class="num">${pc(m.recall_at_20)}</td><td class="num">${pc(m.recall_at_30)}</td></tr>`);
+  });
+  document.getElementById("ci").textContent = R.lgbm_auc_90ci.map(v => v.toFixed(2)).join(" to ");
+</script>
+</body>
+</html>

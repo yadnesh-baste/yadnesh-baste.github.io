@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who leaves a bank, and whom to call first – Yadnesh Baste</title>
+<meta name="description" content="Bank churn segmentation, risk model and retention call list, with an interactive dashboard.">
+<link rel="icon" href="../assets/avatar.svg" type="image/svg+xml"><text y='.9em' font-size='90'>📈</text></svg>">
+<script src="../assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap case">
+  <header class="top" id="top"><div class="top-row"><a class="home" href="../#about"><img src="../assets/avatar.svg" alt=""><span>Yadnesh Baste</span></a><button class="theme-btn" type="button" data-theme-toggle></button></div><nav class="tabs" aria-label="Sections"><a href="../#about">About</a><a href="../#projects" aria-current="page">Projects</a><a href="../#cv">CV</a><a href="../#skills">Skills</a><a href="../#contact">Contact</a></nav></header>
+
+  <div class="case-head">
+    <h1>Who leaves a bank, and whom to call first</h1>
+    <p class="lede">One in five customers of this European retail bank left. I found where churn concentrates, built a model that ranks customers by risk, and turned it into a call list a retention team can work through from the top.</p>
+    <dl class="facts">
+      <div><dt>Data</dt><dd>10,000 customers, France, Germany, Spain</dd></div>
+      <div><dt>Question</dt><dd>Who will leave, and who to contact</dd></div>
+      <div><dt>Tools</dt><dd>Python, LightGBM, Power BI (DAX)</dd></div>
+      <div><dt>Code</dt><dd><a href="https://github.com/yadnesh-baste/bank-churn-retention">github.com/yadnesh-baste</a></dd></div>
+    </dl>
+  </div>
+
+  <h2>Explore the customers</h2>
+  <div class="dash" id="dash">
+    <div class="filters" id="filters"></div>
+    <div class="kpis" aria-live="polite">
+      <div><b id="k-n">–</b>customers</div>
+      <div><b id="k-rate">–</b>churn rate</div>
+      <div><b id="k-out">–</b>left the bank</div>
+    </div>
+    <div class="panels">
+      <div id="p-age"></div><div id="p-prod"></div><div id="p-geo"></div>
+    </div>
+    <div class="slider">
+      <label for="calls">If the retention team calls the riskiest <output id="calls-out">20</output>% of customers this month</label><br>
+      <input id="calls" type="range" min="5" max="100" step="5" value="20">
+      <p style="margin:.4rem 0 0">they reach <b id="reach">–</b> of the customers who would leave, compared with <span id="rand">20%</span> when calling at random.</p>
+      <p class="small muted" style="margin:.3rem 0 0">Measured on 3,000 customers the model never saw during training.</p>
+    </div>
+  </div>
+  <p class="small muted">Amber bars are segments with churn above 30%. Filters apply to all 10,000 customers.</p>
+
+  <div class="measure">
+    <h2>What stands out</h2>
+    <p><strong>Age, not tenure.</strong> Customers aged 50 to 59 leave at 56%, nearly three times the average. Tenure barely matters.</p>
+    <p><strong>The product count is not linear.</strong> Customers with two products are the most loyal (8% churn). One product means 28%, and three or more means 86%. That last group is small, but it suggests cross-selling that went wrong rather than deepening relationships.</p>
+    <p><strong>Germany is different.</strong> German customers leave at 32%, twice the rate in France and Spain, even though they hold higher balances. That's a question for the German business, not only for the model.</p>
+    <p><strong>Inactive customers leave twice as often</strong> as active ones (27% vs 14%), which makes activity a cheap early-warning signal.</p>
+
+    <h2>The model</h2>
+    <p>I compared logistic regression with LightGBM on a held-out 30% of customers. LightGBM reaches an ROC-AUC of <span id="auc"></span> (logistic regression: <span id="auc-l"></span>; 5-fold cross-validation: <span id="cv"></span>), because it captures the non-linear effects of age and product count. The strongest drivers are age, number of products and balance. Estimated salary ranks high too, but it shows no pattern on its own, so I treat it as noise rather than a business insight.</p>
+
+    <h2>What I'd recommend</h2>
+    <p>Work the call list from the top: with capacity for a fifth of customers, the team reaches two thirds of leavers. Pair each call with the reason the segment points to: re-activation offers for inactive customers, a product review for customers with three or more products, and a separate look at German customers. Then measure retention against a randomly held-back control group, so the effect of the calls can be proven rather than assumed.</p>
+    <div class="callout"><p>This mirrors my work at Bajaj Finance, where churn and drop-off analysis with targeted retention initiatives raised customer retention from 15% to 50%. The data here is public, the method is the same.</p></div>
+
+    <h2>Power BI version</h2>
+    <p>The repository includes the data model and the DAX measures to rebuild this dashboard in Power BI: churn rate, leavers, and the share of leavers reached at a chosen call capacity.</p>
+  </div>
+
+  <nav class="next" aria-label="More projects"><a href="secom.html">Previous: which production runs will fail?</a><a href="process.html">Next: from IT request to portfolio decision</a></nav>
+  <footer class="small muted">Dataset: "Churn Modelling" bank customer dataset (public, widely used for teaching). Fictional customers; no personal data.</footer>
+</div>
+<script src="../assets/charts.js"></script>
+<script src="../assets/churn-data.js"></script>
+<script>
+  const D = CHURN.c, N = D.out.length;
+  const DIMS = {
+    geo: { legend: "Country", labels: ["France", "Germany", "Spain"] },
+    gen: { legend: "Gender", labels: ["Female", "Male"] },
+    act: { legend: "Activity", labels: ["Inactive", "Active"] },
+    prod: { legend: "Products", labels: { 1: "1", 2: "2", 3: "3+" } },
+  };
+  const sel = { geo: null, gen: null, act: null, prod: null };
+  const f = document.getElementById("filters");
+  Object.entries(DIMS).forEach(([k, d]) => {
+    const fs = document.createElement("fieldset"); fs.innerHTML = `<legend>${d.legend}</legend><div class="chips"></div>`;
+    const chips = fs.querySelector(".chips"); const opts = [["All", null], ...Object.entries(d.labels).map(([v, l]) => [l, +v])];
+    opts.forEach(([l, v]) => {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = l; b.setAttribute("aria-pressed", v === null);
+      b.onclick = () => { sel[k] = v; chips.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); render(); };
+      chips.appendChild(b);
+    });
+    f.appendChild(fs);
+  });
+  const pct = v => (v * 100).toFixed(0) + "%";
+  function group(idx, key, labels) {
+    const out = Object.keys(labels).map(k => ({ k: +k, n: 0, o: 0 }));
+    idx.forEach(i => { const g = out.find(x => x.k === D[key][i]); if (g) { g.n++; g.o += D.out[i]; } });
+    return out.filter(g => g.n > 0).map(g => ({ label: labels[g.k], value: g.o / g.n, highlight: g.o / g.n > 0.3 }));
+  }
+  function render() {
+    const idx = []; for (let i = 0; i < N; i++) if (Object.keys(sel).every(k => sel[k] === null || D[k][i] === sel[k])) idx.push(i);
+    const out = idx.reduce((a, i) => a + D.out[i], 0);
+    document.getElementById("k-n").textContent = idx.length.toLocaleString("en");
+    document.getElementById("k-rate").textContent = idx.length ? pct(out / idx.length) : "–";
+    document.getElementById("k-out").textContent = out.toLocaleString("en");
+    const opt = { max: 1, fmt: pct, labelW: 52, width: 280, rowH: 28 };
+    Charts.bars(document.getElementById("p-age"), group(idx, "age", { 0: "18–29", 1: "30–39", 2: "40–49", 3: "50–59", 4: "60+" }), { ...opt, title: "Churn by age" });
+    Charts.bars(document.getElementById("p-prod"), group(idx, "prod", { 1: "1", 2: "2", 3: "3+" }), { ...opt, title: "Churn by number of products" });
+    Charts.bars(document.getElementById("p-geo"), group(idx, "geo", { 0: "France", 1: "Germany", 2: "Spain" }), { ...opt, labelW: 60, title: "Churn by country" });
+  }
+  render();
+  const R = CHURN.ranked, tot = R.reduce((a, b) => a + b, 0), s = document.getElementById("calls");
+  function reach() { const p = +s.value, k = Math.round(R.length * p / 100); document.getElementById("calls-out").textContent = p;
+    document.getElementById("reach").textContent = pct(R.slice(0, k).reduce((a, b) => a + b, 0) / tot); document.getElementById("rand").textContent = p + "%"; }
+  s.oninput = reach; reach();
+  document.getElementById("auc").textContent = CHURN.res.auc_gbm.toFixed(2);
+  document.getElementById("auc-l").textContent = CHURN.res.auc_logit.toFixed(2);
+  document.getElementById("cv").textContent = CHURN.res.cv_auc[0].toFixed(2) + " ± " + CHURN.res.cv_auc[1].toFixed(2);
+</script>
+</body>
+</html>

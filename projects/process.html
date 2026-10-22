@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>From IT request to portfolio decision – Yadnesh Baste</title>
+<meta name="description" content="An IT demand-to-portfolio process modelled in BPMN 2.0, with a transparent priority scoring model.">
+<link rel="icon" href="../assets/avatar.svg" type="image/svg+xml"><text y='.9em' font-size='90'>📈</text></svg>">
+<script src="../assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="wrap case">
+  <header class="top" id="top"><div class="top-row"><a class="home" href="../#about"><img src="../assets/avatar.svg" alt=""><span>Yadnesh Baste</span></a><button class="theme-btn" type="button" data-theme-toggle></button></div><nav class="tabs" aria-label="Sections"><a href="../#about">About</a><a href="../#projects" aria-current="page">Projects</a><a href="../#cv">CV</a><a href="../#skills">Skills</a><a href="../#contact">Contact</a></nav></header>
+
+  <div class="case-head">
+    <h1>From IT request to portfolio decision</h1>
+    <p class="lede">Departments ask IT for more than the budget can fund. This process makes sure every request arrives complete, is assessed the same way, and gets a decision the requester can understand.</p>
+    <dl class="facts">
+      <div><dt>Notation</dt><dd>BPMN 2.0, four lanes</dd></div>
+      <div><dt>Based on</dt><dd>My process design work at PowerCo</dd></div>
+      <div><dt>Tools</dt><dd>Camunda Modeler, bpmn.io</dd></div>
+      <div><dt>Files</dt><dd><a href="../assets/demand-to-portfolio.bpmn" download>Download .bpmn</a></dd></div>
+    </dl>
+  </div>
+
+  <div class="callout measure"><p>This is an anonymised reconstruction of a common demand-management pattern, written from public practice and my own experience. It contains no internal PowerCo documents, names or figures.</p></div>
+
+  <div class="measure">
+    <h2>The problem it solves</h2>
+    <p>In a growing company, IT requests come in by email, in meetings and through tickets. Many lack the basics: what problem they solve, who benefits, by when. Effort gets estimated before the scope is clear, priorities follow whoever pushes hardest, and requesters rarely hear why their request waited. At PowerCo I coordinated 15+ demands from seven departments, and the process had to work the same way for all of them.</p>
+  </div>
+
+  <h2>The process</h2>
+  <div class="figure diagram scroll-x"><img src="../assets/demand-to-portfolio.svg" alt="BPMN diagram. Lanes: business requester, demand management, IT architecture, portfolio board. The requester submits a demand; demand management checks completeness and sends incomplete requests back; complete requests are classified and estimated; IT architecture assesses feasibility, dependencies and risks; demand management scores priority; the portfolio board decides; approved demands go into the IT plan and budget, others are recorded with a review date and the requester is informed." style="min-width:900px;width:100%"></div>
+  <p class="small muted">Open the .bpmn file in <a href="https://demo.bpmn.io/">demo.bpmn.io</a> or Camunda Modeler to inspect or edit it.</p>
+
+  <div class="measure">
+    <h2>Design decisions</h2>
+    <p><strong>Completeness before effort.</strong> Demand management checks a request before anyone estimates it. Incomplete requests go back to the requester with the missing points named, which keeps architects' time for requests that can actually be judged.</p>
+    <p><strong>Each lane owns one kind of judgement.</strong> The requester owns the business case, demand management owns completeness and scoring, architecture owns feasibility and risk, the board owns the decision. Nobody decides on information they don't own.</p>
+    <p><strong>"No" is not a dead end.</strong> Requests that aren't funded are recorded with a review date and the requester is told why. That keeps the backlog honest and stops the same request from returning through a side door.</p>
+    <p><strong>The process can change itself.</strong> At PowerCo I also created a change process for updating the lifecycle process itself, so improvements follow a defined route instead of ad-hoc edits. A process nobody can update gets bypassed.</p>
+  </div>
+
+  <h2>Try the priority scoring</h2>
+  <div class="dash">
+    <p class="measure" style="margin-top:0">The board ranks demands with weighted criteria. Move the weights to see how the ranking shifts. The six demands are invented examples.</p>
+    <div class="weights" id="weights"></div>
+    <div class="scroll-x"><table id="rank"><thead><tr><th>Rank</th><th>Demand</th><th class="num">Value</th><th class="num">Urgency</th><th class="num">Risk</th><th class="num">Cost</th><th>Score</th></tr></thead><tbody></tbody></table></div>
+    <p class="small muted" style="margin:.8rem 0 0">Scores run from 1 to 5. Risk and cost count against a demand.</p>
+  </div>
+
+  <div class="measure">
+    <h2>What it changed in practice</h2>
+    <p>Modelling the process in BPMN made hand-offs visible that had lived in people's heads, and gave product owners one reference. I created training for them on the process, including an AI-assisted interactive version so they could practise it before using it for real.</p>
+  </div>
+
+  <nav class="next" aria-label="More projects"><a href="churn.html">Previous: who leaves a bank</a><a href="../#projects">All projects</a></nav>
+</div>
+<script>
+  const CRIT = [["value", "Business value", 40, 1], ["urgency", "Urgency", 25, 1], ["risk", "Dependencies and risk", 20, -1], ["cost", "Cost", 15, -1]];
+  const DEM = [
+    { name: "Data platform access for the quality team", value: 5, urgency: 4, risk: 3, cost: 3 },
+    { name: "Replace legacy shift-planning tool", value: 4, urgency: 3, risk: 4, cost: 5 },
+    { name: "Single sign-on for the supplier portal", value: 3, urgency: 4, risk: 2, cost: 2 },
+    { name: "Energy-consumption dashboard per plant", value: 4, urgency: 2, risk: 2, cost: 2 },
+    { name: "Mobile maintenance checklists", value: 3, urgency: 3, risk: 3, cost: 3 },
+    { name: "Ticket workflow clean-up", value: 2, urgency: 2, risk: 1, cost: 1 },
+  ];
+  const W = {}; const box = document.getElementById("weights");
+  CRIT.forEach(([k, l, v]) => { W[k] = v;
+    box.insertAdjacentHTML("beforeend", `<div><label for="w-${k}">${l}: <output id="o-${k}">${v}</output>%</label><input id="w-${k}" type="range" min="0" max="60" step="5" value="${v}"></div>`);
+    document.getElementById("w-" + k).oninput = e => { W[k] = +e.target.value; document.getElementById("o-" + k).textContent = e.target.value; rank(); };
+  });
+  function rank() {
+    const tot = Object.values(W).reduce((a, b) => a + b, 0) || 1;
+    const rows = DEM.map(d => ({ ...d, s: CRIT.reduce((a, [k, , , sign]) => a + W[k] / tot * (sign > 0 ? d[k] : 6 - d[k]), 0) })).sort((a, b) => b.s - a.s);
+    document.querySelector("#rank tbody").innerHTML = rows.map((d, i) => `<tr><td>${i + 1}</td><td>${d.name}</td><td class="num">${d.value}</td><td class="num">${d.urgency}</td><td class="num">${d.risk}</td><td class="num">${d.cost}</td><td><span class="bar" style="width:${(d.s / 5 * 120).toFixed(0)}px"></span> ${d.s.toFixed(1)}</td></tr>`).join("");
+  }
+  rank();
+</script>
+</body>
+</html>
