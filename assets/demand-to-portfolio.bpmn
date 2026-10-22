@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs" targetNamespace="https://github.com/yadnesh-baste">
+<bpmn:collaboration id="Collab"><bpmn:participant id="Pool" name="IT demand to portfolio decision" processRef="Proc"/></bpmn:collaboration>
+<bpmn:process id="Proc" isExecutable="false"><bpmn:laneSet id="LS">
+<bpmn:lane id="Lane0" name="Business requester"><bpmn:flowNodeRef>start</bpmn:flowNodeRef><bpmn:flowNodeRef>submit</bpmn:flowNodeRef><bpmn:flowNodeRef>rework</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="Lane1" name="Demand management"><bpmn:flowNodeRef>check</bpmn:flowNodeRef><bpmn:flowNodeRef>gwOk</bpmn:flowNodeRef><bpmn:flowNodeRef>classify</bpmn:flowNodeRef><bpmn:flowNodeRef>score</bpmn:flowNodeRef><bpmn:flowNodeRef>plan</bpmn:flowNodeRef><bpmn:flowNodeRef>endPlan</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="Lane2" name="IT architecture"><bpmn:flowNodeRef>assess</bpmn:flowNodeRef></bpmn:lane>
+<bpmn:lane id="Lane3" name="Portfolio board"><bpmn:flowNodeRef>decide</bpmn:flowNodeRef><bpmn:flowNodeRef>gwDec</bpmn:flowNodeRef><bpmn:flowNodeRef>park</bpmn:flowNodeRef><bpmn:flowNodeRef>endPark</bpmn:flowNodeRef></bpmn:lane>
+</bpmn:laneSet>
+<bpmn:startEvent id="start" name="Business need identified"><bpmn:outgoing>f0</bpmn:outgoing></bpmn:startEvent>
+<bpmn:userTask id="submit" name="Submit demand request"><bpmn:incoming>f0</bpmn:incoming><bpmn:outgoing>f1</bpmn:outgoing></bpmn:userTask>
+<bpmn:userTask id="check" name="Check request is complete"><bpmn:incoming>f1</bpmn:incoming><bpmn:incoming>f5</bpmn:incoming><bpmn:outgoing>f2</bpmn:outgoing></bpmn:userTask>
+<bpmn:exclusiveGateway id="gwOk" name="Complete?"><bpmn:incoming>f2</bpmn:incoming><bpmn:outgoing>f3</bpmn:outgoing><bpmn:outgoing>f4</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:userTask id="rework" name="Add missing information"><bpmn:incoming>f4</bpmn:incoming><bpmn:outgoing>f5</bpmn:outgoing></bpmn:userTask>
+<bpmn:userTask id="classify" name="Classify demand and estimate cost"><bpmn:incoming>f3</bpmn:incoming><bpmn:outgoing>f6</bpmn:outgoing></bpmn:userTask>
+<bpmn:userTask id="assess" name="Assess feasibility, dependencies and risks"><bpmn:incoming>f6</bpmn:incoming><bpmn:outgoing>f7</bpmn:outgoing></bpmn:userTask>
+<bpmn:userTask id="score" name="Score priority: value, urgency, dependencies"><bpmn:incoming>f7</bpmn:incoming><bpmn:outgoing>f8</bpmn:outgoing></bpmn:userTask>
+<bpmn:userTask id="decide" name="Decide in portfolio review"><bpmn:incoming>f8</bpmn:incoming><bpmn:outgoing>f9</bpmn:outgoing></bpmn:userTask>
+<bpmn:exclusiveGateway id="gwDec" name="Approved?"><bpmn:incoming>f9</bpmn:incoming><bpmn:outgoing>f10</bpmn:outgoing><bpmn:outgoing>f11</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:userTask id="plan" name="Add to IT plan and budget"><bpmn:incoming>f10</bpmn:incoming><bpmn:outgoing>f12</bpmn:outgoing></bpmn:userTask>
+<bpmn:endEvent id="endPlan" name="Demand planned"><bpmn:incoming>f12</bpmn:incoming></bpmn:endEvent>
+<bpmn:userTask id="park" name="Record decision, set review date, inform requester"><bpmn:incoming>f11</bpmn:incoming><bpmn:outgoing>f13</bpmn:outgoing></bpmn:userTask>
+<bpmn:endEvent id="endPark" name="Demand parked in backlog"><bpmn:incoming>f13</bpmn:incoming></bpmn:endEvent>
+<bpmn:sequenceFlow id="f0" name="" sourceRef="start" targetRef="submit"/>
+<bpmn:sequenceFlow id="f1" name="" sourceRef="submit" targetRef="check"/>
+<bpmn:sequenceFlow id="f2" name="" sourceRef="check" targetRef="gwOk"/>
+<bpmn:sequenceFlow id="f3" name="Yes" sourceRef="gwOk" targetRef="classify"/>
+<bpmn:sequenceFlow id="f4" name="No" sourceRef="gwOk" targetRef="rework"/>
+<bpmn:sequenceFlow id="f5" name="" sourceRef="rework" targetRef="check"/>
+<bpmn:sequenceFlow id="f6" name="" sourceRef="classify" targetRef="assess"/>
+<bpmn:sequenceFlow id="f7" name="" sourceRef="assess" targetRef="score"/>
+<bpmn:sequenceFlow id="f8" name="" sourceRef="score" targetRef="decide"/>
+<bpmn:sequenceFlow id="f9" name="" sourceRef="decide" targetRef="gwDec"/>
+<bpmn:sequenceFlow id="f10" name="Yes" sourceRef="gwDec" targetRef="plan"/>
+<bpmn:sequenceFlow id="f11" name="No" sourceRef="gwDec" targetRef="park"/>
+<bpmn:sequenceFlow id="f12" name="" sourceRef="plan" targetRef="endPlan"/>
+<bpmn:sequenceFlow id="f13" name="" sourceRef="park" targetRef="endPark"/>
+</bpmn:process><bpmndi:BPMNDiagram id="D"><bpmndi:BPMNPlane id="P" bpmnElement="Collab">
+<bpmndi:BPMNShape id="Pool_di" bpmnElement="Pool" isHorizontal="true"><dc:Bounds x="20" y="40" width="1985" height="600"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane0_di" bpmnElement="Lane0" isHorizontal="true"><dc:Bounds x="50" y="40" width="1955" height="150"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane1_di" bpmnElement="Lane1" isHorizontal="true"><dc:Bounds x="50" y="190" width="1955" height="150"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane2_di" bpmnElement="Lane2" isHorizontal="true"><dc:Bounds x="50" y="340" width="1955" height="150"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane3_di" bpmnElement="Lane3" isHorizontal="true"><dc:Bounds x="50" y="490" width="1955" height="150"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="start_di" bpmnElement="start"><dc:Bounds x="232.0" y="97.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="202.0" y="137.0" width="96" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="submit_di" bpmnElement="submit"><dc:Bounds x="355.0" y="75.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="check_di" bpmnElement="check"><dc:Bounds x="520.0" y="225.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="gwOk_di" bpmnElement="gwOk" isMarkerVisible="true"><dc:Bounds x="720.0" y="240.0" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="690.0" y="294.0" width="110" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="rework_di" bpmnElement="rework"><dc:Bounds x="685.0" y="75.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="classify_di" bpmnElement="classify"><dc:Bounds x="850.0" y="225.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="assess_di" bpmnElement="assess"><dc:Bounds x="1015.0" y="375.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="score_di" bpmnElement="score"><dc:Bounds x="1180.0" y="225.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="decide_di" bpmnElement="decide"><dc:Bounds x="1345.0" y="525.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="gwDec_di" bpmnElement="gwDec" isMarkerVisible="true"><dc:Bounds x="1545.0" y="540.0" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="1515.0" y="594.0" width="110" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="plan_di" bpmnElement="plan"><dc:Bounds x="1675.0" y="225.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="endPlan_di" bpmnElement="endPlan"><dc:Bounds x="1882.0" y="247.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="1852.0" y="287.0" width="96" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="park_di" bpmnElement="park"><dc:Bounds x="1675.0" y="525.0" width="120" height="80"/></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="endPark_di" bpmnElement="endPark"><dc:Bounds x="1882.0" y="547.0" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="1852.0" y="587.0" width="96" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNEdge id="f0_di" bpmnElement="f0"><di:waypoint x="268" y="115"/><di:waypoint x="355" y="115"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f1_di" bpmnElement="f1"><di:waypoint x="475" y="115"/><di:waypoint x="498" y="115"/><di:waypoint x="498" y="265"/><di:waypoint x="520" y="265"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f2_di" bpmnElement="f2"><di:waypoint x="640" y="265"/><di:waypoint x="720" y="265"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f3_di" bpmnElement="f3"><di:waypoint x="770" y="265"/><di:waypoint x="850" y="265"/><bpmndi:BPMNLabel><dc:Bounds x="776" y="243" width="24" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f4_di" bpmnElement="f4"><di:waypoint x="745" y="240"/><di:waypoint x="745" y="155"/><bpmndi:BPMNLabel><dc:Bounds x="751" y="218" width="24" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f5_di" bpmnElement="f5"><di:waypoint x="685" y="115"/><di:waypoint x="580" y="115"/><di:waypoint x="580" y="225"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f6_di" bpmnElement="f6"><di:waypoint x="970" y="265"/><di:waypoint x="992" y="265"/><di:waypoint x="992" y="415"/><di:waypoint x="1015" y="415"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f7_di" bpmnElement="f7"><di:waypoint x="1135" y="415"/><di:waypoint x="1158" y="415"/><di:waypoint x="1158" y="265"/><di:waypoint x="1180" y="265"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f8_di" bpmnElement="f8"><di:waypoint x="1300" y="265"/><di:waypoint x="1322" y="265"/><di:waypoint x="1322" y="565"/><di:waypoint x="1345" y="565"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f9_di" bpmnElement="f9"><di:waypoint x="1465" y="565"/><di:waypoint x="1545" y="565"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f10_di" bpmnElement="f10"><di:waypoint x="1570" y="540"/><di:waypoint x="1570" y="265"/><di:waypoint x="1675" y="265"/><bpmndi:BPMNLabel><dc:Bounds x="1576" y="518" width="24" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f11_di" bpmnElement="f11"><di:waypoint x="1595" y="565"/><di:waypoint x="1675" y="565"/><bpmndi:BPMNLabel><dc:Bounds x="1601" y="543" width="24" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f12_di" bpmnElement="f12"><di:waypoint x="1795" y="265"/><di:waypoint x="1882" y="265"/></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="f13_di" bpmnElement="f13"><di:waypoint x="1795" y="565"/><di:waypoint x="1882" y="565"/></bpmndi:BPMNEdge>
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>
