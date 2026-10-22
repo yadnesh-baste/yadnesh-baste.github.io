@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yadnesh Baste – Data Analyst and Data Scientist, Berlin</title>
+<meta name="description" content="Portfolio of Yadnesh Baste: data analysis, machine learning and process design projects with code and case studies.">
+<meta property="og:title" content="Yadnesh Baste – Data Analyst and Data Scientist">
+<meta property="og:description" content="Case studies in manufacturing quality, customer retention and IT process design.">
+<link rel="icon" href="assets/avatar.svg" type="image/svg+xml">
+<script src="assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top" id="top">
+    <div class="top-row">
+      <a class="home" href="#about" data-goto="about"><img src="assets/avatar.svg" alt="" width="34" height="34"> <span>Yadnesh Baste</span></a>
+      <button class="theme-btn" type="button" data-theme-toggle></button>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="t-about" aria-controls="about" aria-selected="true">About</button>
+      <button role="tab" id="t-projects" aria-controls="projects" aria-selected="false" tabindex="-1">Projects</button>
+      <button role="tab" id="t-cv" aria-controls="cv" aria-selected="false" tabindex="-1">CV</button>
+      <button role="tab" id="t-skills" aria-controls="skills" aria-selected="false" tabindex="-1">Skills</button>
+      <button role="tab" id="t-contact" aria-controls="contact" aria-selected="false" tabindex="-1">Contact</button>
+    </nav>
+  </header>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<main>
+<div role="tabpanel" id="about" aria-labelledby="t-about">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Yadnesh<br>Baste</h1>
+        <p class="role">Data analyst and data scientist in Berlin</p>
+        <p class="lede">I turn operational data into decisions people act on: loan customers in India, battery production lines in Germany.</p>
+        <div class="hero-actions"><button class="btn primary" type="button" data-goto="projects">See the projects</button><button class="btn" type="button" data-goto="cv">View my CV</button></div>
+      </div>
+      <div class="portrait">
+        <div class="frame"><img id="avatar" src="assets/avatar.svg" alt="Illustrated avatar of Yadnesh Baste"> <img id="photo" src="assets/yadnesh.jpg" alt="Photo of Yadnesh Baste" hidden></div>
+        <button class="linklike" id="portrait-switch" type="button">Show my photo</button>
+      </div>
+    </div>
+  </div>
+  <figure class="strip" aria-label="Sensor trace across 1,567 semiconductor production runs, with failed runs marked" style="margin-bottom:0">
+    <svg id="strip" preserveAspectRatio="none" aria-hidden="true"></svg>
+  </figure>
+  <div class="wrap">
+    <figcaption class="strip-caption">
+      <span>One sensor across 1,567 semiconductor production runs, July to October 2008. <span class="dot"></span>The 104 runs that failed.</span>
+      <a href="projects/secom.html">Could a model have flagged them earlier?</a>
+    </figcaption>
+
+    <div class="about-grid">
+      <div class="measure">
+        <h3>About me</h3>
+        <p>I started as a mechanical engineer and moved into data at Bajaj Finance in Pune, where my title was Data Scientist. The work was always mixed: market research for the launch of a rural two-wheeler loan, KPI reporting for sales and marketing, and later customer analytics and a prediction model for gold loans.</p>
+        <p>In 2024 I moved to Berlin for a master's in Project Management and Data Science at HTW Berlin. Since then I've worked at PowerCo, Volkswagen Group's battery company: first in IT demand and portfolio management, then on sensor data from battery production, and now on my master's thesis about AI answers over enterprise documents and data.</p>
+        <p>That mix is what I bring. I can build the pipeline and the model, and I can sit with the business to agree on the problem we're solving.</p>
+        <h3 style="margin-top:2rem">Hiring? Pick the role</h3>
+        <div class="pill-row" id="roles">
+          <button type="button" data-role="da">Data analyst</button>
+          <button type="button" data-role="ds">Data scientist</button>
+          <button type="button" data-role="ba">Business analyst / PMO</button>
+        </div>
+        <div class="recruiter-note" id="role-note" aria-live="polite"><p class="muted">Choose a role to see the most relevant evidence.</p></div>
+      </div>
+      <div>
+        <h3>Quick facts</h3>
+        <dl class="facts-list">
+          <div><dt>Based in</dt><dd>Berlin, open to relocating within Germany</dd></div>
+          <div><dt>Right now</dt><dd>Master's thesis at PowerCo SE on hybrid RAG</dd></div>
+          <div><dt>Looking for</dt><dd>Data analyst, data scientist and business analyst roles</dd></div>
+          <div><dt>Languages</dt><dd>English C2, German B1 (actively learning), Hindi C1, Marathi native</dd></div>
+          <div><dt>Certificate</dt><dd>Google Data Analytics Professional Certificate</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PROJECTS ============ -->
+<div role="tabpanel" id="projects" aria-labelledby="t-projects" hidden>
+  <div class="wrap">
+    <div class="panel-head"><h2>Projects</h2><p>Three case studies on public data, each with code you can run. Every result below is reproducible from the repository.</p></div>
+    <article class="project">
+      <div>
+        <p class="kind">Machine learning for manufacturing quality</p>
+        <h3><a href="projects/secom.html">Which production runs will fail? An honest test on 590 sensors</a></h3>
+        <p>Many published models for this dataset report over 90% accuracy, yet a model that passes every run is already 93% accurate. I rebuilt the problem the way a factory would face it: learn from past runs, predict the next ones.</p>
+        <p class="result">Inspecting the riskiest 10% of runs catches 22% of failures, about twice the rate of random checks. A shuffled split would have overstated the model.</p>
+        <div class="links"><a href="projects/secom.html">Read the case study</a><a href="https://github.com/yadnesh-baste/secom-fault-detection">Code on GitHub</a></div>
+        <p class="tools">Python, pandas, scikit-learn, LightGBM, time-based validation</p>
+      </div>
+      <div class="figure" id="fig-secom"></div>
+    </article>
+
+    <article class="project">
+      <div>
+        <p class="kind">Customer analytics for retention</p>
+        <h3><a href="projects/churn.html">Who leaves a bank, and whom to call first</a></h3>
+        <p>Ten thousand retail-bank customers in France, Germany and Spain. I segmented churn, built a risk model and turned it into a call list a retention team could work through, the same question I worked on at Bajaj Finance.</p>
+        <p class="result">Calling the riskiest 20% of customers reaches 65% of those who would leave. German customers churn at twice the rate of French and Spanish ones.</p>
+        <div class="links"><a href="projects/churn.html">Open the interactive dashboard</a><a href="https://github.com/yadnesh-baste/bank-churn-retention">Code on GitHub</a></div>
+        <p class="tools">Python, LightGBM, logistic regression, Power BI data model and DAX</p>
+      </div>
+      <div class="figure" id="fig-churn"></div>
+    </article>
+
+    <article class="project">
+      <div>
+        <p class="kind">Business process design</p>
+        <h3><a href="projects/process.html">From IT request to portfolio decision, modelled in BPMN 2.0</a></h3>
+        <p>At PowerCo I designed a demand-to-portfolio process for IT requests from seven departments. This is a public, anonymised version of the pattern: who does what, where requests stall, and how priorities become transparent.</p>
+        <p class="result">One intake, a completeness check before anyone estimates effort, and a scoring model the portfolio board can explain.</p>
+        <div class="links"><a href="projects/process.html">Read the case study</a><a href="https://github.com/yadnesh-baste/it-demand-process-bpmn">BPMN file on GitHub</a></div>
+        <p class="tools">BPMN 2.0, Camunda Modeler / bpmn.io, requirements analysis</p>
+      </div>
+      <a class="figure diagram" href="projects/process.html"><img src="assets/demand-to-portfolio.svg" alt="BPMN diagram of the IT demand to portfolio decision process with four lanes"></a>
+    </article>
+
+    <p class="muted measure" style="margin-top:1.5rem">In progress: question answering over documents and SQL with cited sources, the topic of my master's thesis, rebuilt on public data.</p>
+  </div>
+</div>
+
+<!-- ============ CV ============ -->
+<div role="tabpanel" id="cv" aria-labelledby="t-cv" hidden>
+  <div class="wrap">
+    <div class="panel-head"><h2>CV</h2><p>Mixed roles across data science, analysis and project management. Filter to the side you're hiring for.</p>
+      <div class="cv-actions"><a class="btn primary" href="assets/Baste_Yadnesh_CV.pdf" download>Download CV (PDF)</a><button class="btn" type="button" onclick="window.print()">Print this page</button></div>
+    </div>
+    <div class="cv-block">
+      <h3>Experience</h3>
+      <div class="chips cv-filter" role="group" aria-label="Filter experience">
+        <button type="button" aria-pressed="true" data-track="all">Everything</button>
+        <button type="button" aria-pressed="false" data-track="data">Data and AI</button>
+        <button type="button" aria-pressed="false" data-track="pm">Project and process</button>
+      </div>
+      <ol class="timeline" id="cv-list">
+        <li><div class="when">09/2026 – today</div><div>
+          <h3>Master's thesis, Data and AI solutions</h3><p class="org">PowerCo SE, Volkswagen Group's battery company, Salzgitter</p>
+          <ul><li data-track="data">Building a hybrid retrieval (RAG) framework that answers enterprise questions from both documents and SQL data, using Databricks, LangGraph and vector search.</li></ul></div></li>
+        <li><div class="when">03/2026 – 08/2026</div><div>
+          <h3>Data analytics intern</h3><p class="org">PowerCo SE, alongside the M.Sc.</p>
+          <ul><li data-track="data">Organised data from 200+ machine sensors across battery production stages into a data model in Databricks.</li>
+              <li data-track="data">Checked machine readiness by cross-validating sensor data, for example that a machine's running meter only ever increases.</li>
+              <li data-track="data">Built Grafana and Power BI dashboards showing that all machines are operating well.</li></ul></div></li>
+        <li><div class="when">09/2025 – 02/2026</div><div>
+          <h3>IT demand and portfolio management intern</h3><p class="org">PowerCo SE, alongside the M.Sc.</p>
+          <ul><li data-track="pm">Designed the Digital Lifecycle (DPL) process in BPMN 2.0 and a change process for updating it.</li>
+              <li data-track="pm">Collected and assessed 15+ IT demands with stakeholders from 7 departments and placed them in the budget by priority.</li>
+              <li data-track="pm">Consolidated budget reporting for management and aligned with project owners to keep the portfolio within plan.</li>
+              <li data-track="pm">Acted as product owner for ServiceNow: release testing, backlog refinement, Scrum refinements and retrospectives.</li>
+              <li data-track="pm">Created training for product owners on the DPL process, including an AI-assisted interactive version.</li></ul></div></li>
+        <li><div class="when">10/2021 – 07/2024</div><div>
+          <h3>Data Scientist</h3><p class="org">Bajaj Finance Ltd, Indian non-banking finance company (consumer and gold loans), Pune</p>
+          <ul><li data-track="pm">Ran market research for the launch of a rural two-wheeler loan across 2+ Indian states: competitor and sales analysis, management reporting.</li>
+              <li data-track="data">Built the reporting framework and KPIs that gave sales and marketing full visibility after the launch.</li>
+              <li data-track="data">Raised customer retention from 15% to 50% through churn and drop-off analysis and targeted retention initiatives.</li>
+              <li data-track="data">Supplied the cold-calling data behind 40% of monthly Gold Loan sales, and built a model predicting next month's likely customers.</li>
+              <li data-track="pm">Planned marketing campaigns by customer data and geography: an average 13% gain in new customers, 2022–2024.</li>
+              <li data-track="data">Automated 80% of reporting with Databricks workflows, Power BI and Tableau; migrated 300+ tables from the data warehouse to the data lake.</li>
+              <li data-track="pm">Trained 3 junior colleagues to keep these projects running.</li></ul></div></li>
+      </ol>
+    </div>
+    <div class="cv-block">
+      <h3>Education</h3>
+      <div class="edu">
+        <div><span class="when">10/2024 – today</span><span><b>M.Sc. Project Management and Data Science</b>, HTW Berlin<br><span class="muted">Projects: machine-learning classification of faulty semiconductor runs (SECOM); obstacle detection and a digital twin on the RailSem dataset.</span></span></div>
+        <div><span class="when">2017 – 2021</span><span><b>B.E. Mechanical Engineering</b>, Savitribai Phule Pune University, India</span></div>
+      </div>
+    </div>
+    <div class="cv-block">
+      <h3>Certificate and languages</h3>
+      <p>Google Data Analytics Professional Certificate</p>
+      <p class="muted">English C2, German B1 (actively learning), Hindi C1, Marathi native</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SKILLS ============ -->
+<div role="tabpanel" id="skills" aria-labelledby="t-skills" hidden>
+  <div class="wrap">
+    <div class="panel-head"><h2>Skills</h2><p>Select a skill to see where I've used it.</p></div>
+    <div class="skill-detail" id="skill-detail" aria-live="polite"><span class="muted">No skill selected yet.</span></div>
+    <div class="skill-groups" id="skill-groups"></div>
+  </div>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<div role="tabpanel" id="contact" aria-labelledby="t-contact" hidden>
+  <div class="wrap">
+    <div class="panel-head"><h2>Let's talk</h2><p>I'm looking for data analyst, data scientist and business analyst roles in Germany, and I'm happy to relocate.</p></div>
+    <div class="contact-grid">
+      <button class="card" type="button" id="copy-email"><small>Email, select to copy</small><span>yadneshgbaste@gmail.com</span></button>
+      <a href="https://www.linkedin.com/in/yadneshbaste"><small>LinkedIn</small><span>linkedin.com/in/yadneshbaste</span></a>
+      <a href="https://github.com/yadnesh-baste"><small>GitHub</small><span>github.com/yadnesh-baste</span></a>
+      <a href="assets/Baste_Yadnesh_CV.pdf" download><small>CV</small><span>Download PDF</span></a>
+    </div>
+  </div>
+</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="assets/charts.js"></script>
+<script src="assets/secom-data.js"></script>
+<script src="assets/churn-data.js"></script>
+<script src="assets/site.js"></script>
+</body>
+</html>
